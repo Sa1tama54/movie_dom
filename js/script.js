@@ -57,7 +57,13 @@ const generateMovieList = (movies) => {
 const addNewMovie = (e) => {
   e.preventDefault();
 
-  movieDB.movies.push(addInput.value);
+  let newMovie = addInput.value;
+
+  if (newMovie.length > 21) {
+    newMovie = newMovie.slice(0, 21) + "...";
+  }
+
+  movieDB.movies.push(newMovie);
   const sortedMovies = sortArr(movieDB.movies);
 
   generateMovieList(sortedMovies);
