@@ -13,7 +13,9 @@ const movieDB = {
 const advBlocks = document.querySelectorAll(".promo__adv > img");
 const genre = document.querySelector(".promo__genre");
 const promoBg = document.querySelector(".promo__bg");
-const interactiveList = document.querySelector(".promo__interactive-list");
+const movieList = document.querySelector(".promo__interactive-list");
+const addInput = document.querySelector(".adding__input");
+const addBtn = document.querySelector(".add > button");
 
 advBlocks.forEach((block) => {
   block.remove();
@@ -23,15 +25,46 @@ genre.textContent = "Драма";
 
 promoBg.style.backgroundImage = "url('../img/bg.jpg')";
 
-interactiveList.innerHTML = "";
+const sortArr = (arr) => {
+  const newArr = [];
 
-const movies = movieDB.movies.sort();
+  arr.forEach((item) => {
+    newArr.push(item.toLowerCase());
+  });
 
-movies.forEach((movie, i) => {
-  console.log(interactiveList);
-  interactiveList.innerHTML += `
-    <li class='promo__interactive-item'>
-      ${i + 1}. ${movie}
-      <div class='delete'></div>
-    </li>`;
-});
+  return newArr.sort();
+};
+
+const generateMovieList = (movies) => {
+  movieList.innerHTML = "";
+
+  const sortedMovies = sortArr(movies);
+
+  sortedMovies.forEach((movie, i) => {
+    const li = document.createElement("li");
+    li.className = "promo__interactive-item";
+
+    const removingElement = document.createElement("div");
+    removingElement.className = "delete";
+
+    li.textContent = `${i + 1}. ${movie}`;
+    li.append(removingElement);
+
+    movieList.append(li);
+  });
+};
+
+const addNewMovie = (e) => {
+  e.preventDefault();
+
+  movieDB.movies.push(addInput.value);
+  const sortedMovies = sortArr(movieDB.movies);
+
+  generateMovieList(sortedMovies);
+
+  addInput.value = "";
+};
+
+addBtn.addEventListener("click", addNewMovie);
+
+generateMovieList(movieDB.movies);
