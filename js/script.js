@@ -14,8 +14,9 @@ const advBlocks = document.querySelectorAll(".promo__adv > img");
 const genre = document.querySelector(".promo__genre");
 const promoBg = document.querySelector(".promo__bg");
 const movieList = document.querySelector(".promo__interactive-list");
-const addInput = document.querySelector(".adding__input");
-const addBtn = document.querySelector(".add > button");
+const addForm = document.querySelector(".add");
+const addInput = addForm.querySelector(".adding__input");
+const favorite = addForm.querySelector("input[type=checkbox]");
 
 advBlocks.forEach((block) => {
   block.remove();
@@ -62,20 +63,27 @@ const generateMovieList = (movies) => {
 const addNewMovie = (e) => {
   e.preventDefault();
 
-  let newMovie = addInput.value;
+  let newMovie = addInput.value.trim();
 
-  if (newMovie.length > 21) {
-    newMovie = newMovie.slice(0, 21) + "...";
+  if (newMovie) {
+    if (newMovie.length > 21) {
+      newMovie = newMovie.slice(0, 21) + "...";
+    }
+
+    if (favorite.checked) {
+      console.log("Добавляем любимый фильм");
+    }
+
+    movieDB.movies.push(newMovie);
+    const sortedMovies = sortArr(movieDB.movies);
+
+    generateMovieList(sortedMovies);
   }
 
-  movieDB.movies.push(newMovie);
-  const sortedMovies = sortArr(movieDB.movies);
-
-  generateMovieList(sortedMovies);
-
+  favorite.checked = false;
   addInput.value = "";
 };
 
-addBtn.addEventListener("click", addNewMovie);
+addForm.addEventListener("submit", addNewMovie);
 
 generateMovieList(movieDB.movies);
