@@ -51,6 +51,11 @@ const generateMovieList = (movies) => {
     li.append(removingElement);
 
     movieList.append(li);
+
+    removingElement.addEventListener("click", () => {
+      movies.splice(i, 1);
+      generateMovieList(movies);
+    });
   });
 };
 
